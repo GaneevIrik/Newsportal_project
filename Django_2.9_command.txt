@@ -1,0 +1,55 @@
+from newsportal_app.models import *
+
+u1=User.objects.create_user('Tony Boo')
+Author.objects.create(authorUser = u1)
+
+u2=User.objects.create_user('Ben Gem')
+Author.objects.create(authorUser = u2)
+
+
+Category.objects.create(name='Sports')
+Category.objects.create(name='Policy')
+Category.objects.create(name='In World')
+Category.objects.create(name='Animals')
+
+author=Author.objects.get(id=1)
+Post.objects.create(author=author, categoryType='AR', title='Who win?', text="В октябре российский экс-чемпион UFC в легчайшем весе Петр Ян проведет очередной поединок в организации. Его соперником на турнире в Абу-Даби станет 27-летний американец Шон О'Мэлли по прозвищу Сахарный")
+
+Post.objects.create(author=author, categoryType='NW', title='Топ-5 пресноводных аквариумных рыбок', text="Разведение декоративных рыбок становится страстью все большего числа любителей животных: неудивительно, ведь вид чрезвычайно красочного подводного мира морских существ не только очаровывает и завораживает, но и успокаивает в суете повседневной жизни. Какие рыбы лучше всего подходят для домашнего аквариума? Представляем топ-5 самых популярных пресноводных рыб для вашего аквариума с их характеристиками и потребностями.")
+
+author=Author.objects.get(id=2)
+Post.objects.create(author=author, categoryType='AR', title='Как западные страны охотятся за старой военной техникой', text="В 1941 году СССР оказался в сложнейшем стратегическом положении: потенциальных союзников на континенте не было, зато потенциальных противников — в избытке (помимо Германии и её восточноевропейских сателлитов вступившая в войну Финляндия, а также планировавшие атаку Турция и Япония). При протяжённой общей границе с Германией, амбициях Адольфа Гитлера и Иосифа Сталина, а также непримиримых идеологиях рейха и СССР было ясно, что война между ними станет грандиозной битвой")
+
+
+/Добавление категории
+
+Post.objects.get(id=1).postCategory.add(Category.objects.get(id=1))  
+
+
+/Добавление комментария
+
+Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=Author.objects.get(id=1).authorUser, text='Болеем за Яна!')
+Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=Author.objects.get(id=1).authorUser, text='Победит Пудель!')
+Comment.objects.create(commentPost=Post.objects.get(id=2), commentUser=Author.objects.get(id=1).authorUser, text='Новость дня')
+Comment.objects.create(commentPost=Post.objects.get(id=2), commentUser=Author.objects.get(id=2).authorUser, text='Спасибо автору')
+
+
+/Лайки и дизлайки
+Comment.objects.get(id=1).like()
+Comment.objects.get(id=1).like()
+Comment.objects.get(id=2).dislike()
+
+Post.objects.get(id=1).like()
+Post.objects.get(id=2).dislike()
+
+Author.objects.get(id=1).update_rating()
+Author.objects.get(id=2).update_rating()
+
+/Лучший автор
+a = Author.objects.order_by('-ratingAuthor')
+a[0]
+
+/Лучшая статья
+a = Post.objects.order_by('rating').values('dateCreation','author', 'rating', 'title', 'text')[:1]
+
+
