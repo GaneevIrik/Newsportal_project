@@ -1,0 +1,30 @@
+{% extends 'flatpages/default.html' %}
+
+{% load bad_words %}
+
+{% block title %}
+Post
+{% endblock title %}
+
+{% block content %}
+   <table>
+       <tr>
+           <td> Заголовок </td>
+           <td> Дата публикации</td>
+           <td> Текст статьи </td>
+       </tr>
+
+       <tr>
+               <!-- Не забываем, что переменные в шаблоне ничем не отличаются
+                от переменных в Python. Здесь также можно получать доступ к
+                полям объекта модели. Например, здесь мы выводим имя,
+                в следующем столбце описание, и т.д.  -->
+           <td>{{ post.title|censor }}</td>
+           <td>{{ post.dateCreation|date:'d M Y' }}</td>
+           <td>{{ post.text|censor }}</td>
+       </tr>
+
+
+   </table>
+
+{% endblock content %}
