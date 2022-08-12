@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
+from django.urls import reverse
 
 
 
@@ -56,6 +57,11 @@ class Post(models.Model):
         self.rating -= 1
         self.save()
 
+    # def __str__(self):
+    #     return f'{self.name.title()}: {self.description[:10]}'
+
+    def get_absolute_url(self):
+        return reverse('post_detail', args=[str(self.id)])
 
 class PostCategory(models.Model):
     postThrough = models.ForeignKey(Post, on_delete=models.CASCADE)

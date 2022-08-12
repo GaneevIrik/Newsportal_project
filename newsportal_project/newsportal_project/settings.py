@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'newsportal_app',
     'django.contrib.sites',
     'django.contrib.flatpages',
+    'django_filters',
 
 ]
 
