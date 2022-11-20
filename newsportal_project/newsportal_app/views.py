@@ -3,6 +3,9 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import Post
 from .filters import PostFilter
 from .forms import PostF
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin                    #модуль D5.6
+
 
 
 class PostList(ListView):
@@ -48,7 +51,9 @@ class SearchPost(ListView):
         return context
 
 
-class PostCreate(CreateView):
+class PostCreate(PermissionRequiredMixin, CreateView):               # было LoginRequiredMixin,  модуль D5.6
+    #raise_exception = True                                         #модуль D5.6
+    permission_required = ('newsportal_app.add_post')               #модуль D5.6
     form_class = PostF
     model = Post
     template_name = 'post_edit.html'
@@ -59,7 +64,8 @@ class PostCreate(CreateView):
         return super().form_valid(form)
 
 
-class PostUpdate(UpdateView):
+class PostUpdate(PermissionRequiredMixin, UpdateView):              # было LoginRequiredMixin,  модуль D5.6
+    permission_required = ('newsportal_app.change_post',)            #модуль D5.6
     form_class = PostF
     model = Post
     template_name = 'post_edit.html'
@@ -70,7 +76,8 @@ class PostUpdate(UpdateView):
         return super().form_valid(form)
 
 
-class PostDelete(DeleteView):
+class PostDelete(PermissionRequiredMixin, DeleteView):                   # было LoginRequiredMixin,  модуль D5.6
+    permission_required = ('newsportal_app.delete_post',)                #модуль D5.6
     model = Post
     template_name = 'post_delete.html'
     success_url = reverse_lazy('post_list')
@@ -81,7 +88,8 @@ class PostDelete(DeleteView):
         return super().form_valid(form)
 
 
-class ArticleCreate(CreateView):
+class ArticleCreate(LoginRequiredMixin, CreateView):
+    raise_exception = True
     form_class = PostF
     model = Post
     template_name = 'article_edit.html'
@@ -111,3 +119,4 @@ class ArticleDelete(DeleteView):
         post = form.save(commit=False)
         post.postCategory = 'AR'
         return super().form_valid(form)
+

@@ -41,6 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
     'django_filters',
+    'allauth',                                          #для подключения allauth модуль D5.4
+    'allauth.account',                                  #для подключения allauth модуль D5.4
+    'allauth.socialaccount',                            #для подключения allauth модуль D5.4
+    'allauth.socialaccount.providers.yandex',           #для подключения allauth модуль D5.4
 
 ]
 
@@ -68,15 +72,22 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',                   #для подключения allauth модуль D5.4
                 ],
         },
     },
 ]
 
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',                    #для подключения allauth модуль D5.4
+    'allauth.account.auth_backends.AuthenticationBackend',          #для подключения allauth модуль D5.4
+]
+
 WSGI_APPLICATION = 'newsportal_project.wsgi.application'
+
 
 
 # Database
@@ -134,3 +145,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
+
+ACCOUNT_EMAIL_REQUIRED = True                        #для подключения allauth модуль D5.4
+ACCOUNT_UNIQUE_EMAIL = True                         #для подключения allauth модуль D5.4
+ACCOUNT_USERNAME_REQUIRED = False                   #для подключения allauth модуль D5.4
+ACCOUNT_AUTHENTICATION_METHOD = 'email'             #для подключения allauth модуль D5.4
+ACCOUNT_EMAIL_VERIFICATION = 'none'                 #для подключения allauth модуль D5.4
+
+ACCOUNT_FORMS = {"signup": "accounts.forms.CustomSignUpForm"}   #Модуль D5.4
+
+LOGIN_REDIRECT_URL = "/news"
+
+
