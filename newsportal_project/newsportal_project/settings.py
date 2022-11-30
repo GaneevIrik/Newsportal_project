@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'newsportal_app',
+    #'newsportal_app',
+    'newsportal_app.apps.NewsportalAppConfig',
     'django.contrib.sites',
     'django.contrib.flatpages',
     'django_filters',
@@ -136,6 +137,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+SITE_URL = 'http://127.0.0.1:8080'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -156,4 +158,10 @@ ACCOUNT_FORMS = {"signup": "accounts.forms.CustomSignUpForm"}   #Модуль D5
 
 LOGIN_REDIRECT_URL = "/news"
 
+EMAIL_HOST = 'smtp.yandex.ru'  # адрес сервера Яндекс-почты для всех один и тот же           #модуль D6.2
+EMAIL_PORT = 465  # порт smtp сервера тоже одинаковый                                        #модуль D6.2
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')                                                            #модуль D6.2
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')                                                     #модуль D6.2
+EMAIL_USE_SSL = True                                                                         #модуль D6.2
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
 

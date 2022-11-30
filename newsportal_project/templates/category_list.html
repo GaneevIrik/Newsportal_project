@@ -1,5 +1,4 @@
 {% extends 'flatpages/default.html' %}
-
 {% load bad_words %}
 
 {% block title %}
@@ -7,16 +6,13 @@ Posts
 {% endblock title %}
 
 {% block content %}
-   <h1>Все новости!</h1>
-
-<!--    <form action="", method="get">-->
-<!--        {{filterset.form.as_p}}-->
-<!--        <input type="submit" value="Найти" />-->
-<!--    </form>>-->
-
-
+   <h1 class="text-center"> Все новости! <span class="text-muted fs-6 fw-normal"> Всего: {{ page.obj.paginator.count }} </span></h1>
+    {% if is_not_subscriber %}
+    <p class="text-center"> <a href="{% url 'subscribe' category.id %}" class="btn btn-secondary btn-sm">Подписаться </a></p>
+    {% endif %}>
     <hr>
-   {% if posts %}
+
+   {% if category_news_list %}
        <table>
            <tr>
                <td>Заголовок</td>
@@ -24,13 +20,13 @@ Posts
                <td>Текст статьи</td>
            </tr>
 
-          {% for post in posts %}
+          {% for post in category_news_list %}
            <tr>
                <td>{{ post.title|censor }}</td>
                <td>{{ post.dateCreation|date:'d M Y' }}</td>
-               <td>{{ post.text|truncatechars:200|censor }}</td>
+               <td>{{ post.text|truncatechars:200 }}</td>
            </tr>
-            <td>
+           <td>
                {% for Category in post.postCategory.all %}
                <a href="{% url 'category_list' Category.id %}">{{ category }}</a>
                {% endfor %}

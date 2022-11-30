@@ -1,10 +1,12 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post
+from .models import Post, Category
 from .filters import PostFilter
 from .forms import PostF
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.mixins import LoginRequiredMixin                    #модуль D5.6
+from django.shortcuts import redirect, get_object_or_404, render
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -60,7 +62,6 @@ class PostCreate(PermissionRequiredMixin, CreateView):               # было 
 
     def form_valid(self, form):
         post = form.save(commit=False)
-        post.postCategory = 'NW'
         return super().form_valid(form)
 
 
@@ -72,7 +73,6 @@ class PostUpdate(PermissionRequiredMixin, UpdateView):              # было L
 
     def form_valid(self, form):
         post = form.save(commit=False)
-        post.postCategory = 'NW'
         return super().form_valid(form)
 
 
@@ -84,7 +84,7 @@ class PostDelete(PermissionRequiredMixin, DeleteView):                   # бы�
 
     def form_valid(self, form):
         post = form.save(commit=False)
-        post.postCategory = 'NW'
+        #post.postCategory = 'NW'
         return super().form_valid(form)
 
 
@@ -107,7 +107,7 @@ class ArticleUpdate(UpdateView):
 
     def form_valid(self, form):
         post = form.save(commit=False)
-        post.postCategory = 'AR'
+        #post.postCategory = 'AR'
         return super().form_valid(form)
 
 class ArticleDelete(DeleteView):
@@ -117,6 +117,33 @@ class ArticleDelete(DeleteView):
 
     def form_valid(self, form):
         post = form.save(commit=False)
-        post.postCategory = 'AR'
+       # post.postCategory = 'AR'
         return super().form_valid(form)
 
+
+class CategoryListView(ListView):
+    model = Post
+    template_name = 'category_list.html'
+    context_object_name = 'category_news_list'
+    paginate_by = 10
+
+    def get_queryset(self):
+        #данная кострукция выдаст ошибку 404 если страница не найдена
+        self.Category = get_object_or_404(Category, id=self.kwargs['pk'])
+        queryset = Post.objects.filter(postCategory=self.Category).order_by('-dateCreation')
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_subscriber'] = self.request.user not in self.Category.subscribers.all()
+        context['category'] = self.Category
+        return context
+
+@login_required
+def subscribe(request, pk):
+    user = request.user
+    category = Category.objects.get(id=pk)
+    category.subscribers.add(user)
+
+    message = 'Вы успешно подписались на рассылку новостей категории'
+    return render(request, 'subscribe.html', {'category': category, 'message': message})

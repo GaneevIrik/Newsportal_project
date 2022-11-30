@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('pages/', include('django.contrib.flatpages.urls')),
@@ -24,4 +25,5 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),                         #Модуль D5.4
     #path('accounts/', include('django.contrib.auth.urls')),            #Модуль D5.4
     #path('accounts/', include('accounts.urls')),                       #Модуль D5.4
+
     ]
