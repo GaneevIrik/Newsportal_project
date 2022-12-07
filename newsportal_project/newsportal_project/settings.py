@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
     'django_filters',
+    'django_apscheduler',
     'allauth',                                          #для подключения allauth модуль D5.4
     'allauth.account',                                  #для подключения allauth модуль D5.4
     'allauth.socialaccount',                            #для подключения allauth модуль D5.4
@@ -89,7 +90,8 @@ AUTHENTICATION_BACKENDS = [
 
 WSGI_APPLICATION = 'newsportal_project.wsgi.application'
 
-
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+APSCHEDULER_RUN_NOW_TIMEOUT = 25
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -165,3 +167,8 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')                          
 EMAIL_USE_SSL = True                                                                         #модуль D6.2
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
 
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
